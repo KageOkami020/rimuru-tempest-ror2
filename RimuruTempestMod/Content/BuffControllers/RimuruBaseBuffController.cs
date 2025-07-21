@@ -47,7 +47,7 @@ namespace RimuruMod.Content.BuffControllers
             ActiveBuffEffect();
             stopwatch += Time.fixedDeltaTime;
 
-            if (stopwatch >= lifetime && !isPermaBuff)
+            if (stopwatch >= lifetime && !isPermaBuff && !Config.turnOffDevourBuffTimers.Value)
             {
                 Destroy(this);
             }
@@ -61,7 +61,7 @@ namespace RimuruMod.Content.BuffControllers
 
         public virtual void RefreshTimers()
         {
-            lifetime += StaticValues.refreshTimerDuration;
+            lifetime += Config.devourBuffLength.Value;
         }
 
         public virtual void ActiveBuffEffect()

@@ -39,6 +39,10 @@ namespace RimuruMod.Modules
         public static ConfigEntry<float> glideSpeed;
         public static ConfigEntry<float> glideAcceleration;
 
+        // Devour Buff
+        public static ConfigEntry<bool> turnOffDevourBuffTimers;
+        public static ConfigEntry<float> devourBuffLength;
+
         //Add config for all damage coefficients.
         /*
         //Waterblade parameters 05
@@ -94,6 +98,26 @@ namespace RimuruMod.Modules
                 new ConfigDefinition("06 - Gliding", "Falling acceleration when gliding"),
                 29.6f,
                 new ConfigDescription("Determines the falling acceleration when gliding.",
+                    null,
+                    Array.Empty<object>()
+                )
+            );
+
+            turnOffDevourBuffTimers = RimuruPlugin.instance.Config.Bind<bool>
+            (
+                new ConfigDefinition("07 - Devour Buffs", "Disable Timers on buffs"),
+                false,
+                new ConfigDescription("Toggls if the buff should persist infinitely or not.",
+                    null,
+                    Array.Empty<object>()
+                )
+            );
+
+            devourBuffLength = RimuruPlugin.instance.Config.Bind<float>
+            (
+                new ConfigDefinition("07 - Devour Buffs", "Devour Buff Length"),
+                60f,
+                new ConfigDescription("Lifetime of buff when first consumed. If another stack is attained while you already have that buff, it will refresh the buff by adding this amount of seconds to its lifetime.",
                     null,
                     Array.Empty<object>()
                 )
@@ -286,6 +310,19 @@ namespace RimuruMod.Modules
                         min = 0f,
                         max = 100f,
                         increment = 0.05f
+                    }
+                ));
+
+            ModSettingsManager.AddOption(new CheckBoxOption(turnOffDevourBuffTimers));
+
+            ModSettingsManager.AddOption(
+                new StepSliderOption(
+                    devourBuffLength,
+                    new StepSliderConfig
+                    {
+                        min = 10f,
+                        max = 900f,
+                        increment = 1f
                     }
                 ));
         }
