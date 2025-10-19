@@ -6,35 +6,35 @@ using RimuruMod.Modules;
 namespace RimuruMod.Content.Controllers
 {
     /// <summary>
-    /// Manages Rimuru's evolution phases - inspired by Deku mod's progression system
-    /// Character evolves from Slime -> Named Monster -> Demon Lord -> True Dragon
+    /// Manages Rimuru's evolution phases based on player level
+    /// Level 1-9: Pure Slime
+    /// Level 10-19: Human Form Acquired (Slime + Human)
+    /// Level 20-29: Demon Lord Awakening
+    /// Level 30+: True Dragon Ascension
     /// </summary>
     public class EvolutionController : MonoBehaviour
     {
         public CharacterMaster characterMaster;
         public CharacterBody characterBody;
 
-        // Evolution phases
+        // Evolution phases based on level
         public enum EvolutionPhase
         {
-            Slime = 0,           // Starting phase
-            NamedMonster = 1,    // After devouring enough enemies
-            DemonLord = 2,       // Mid-game evolution
-            TrueDragon = 3       // Final form
+            PureSlime = 0,        // Level 1-9: Slime only
+            HumanFormAcquired = 1, // Level 10-19: Slime + Human toggle
+            DemonLordAwakening = 2, // Level 20-29: Enhanced forms
+            TrueDragonAscension = 3 // Level 30+: Mastered forms
         }
 
-        public EvolutionPhase currentPhase = EvolutionPhase.Slime;
+        public EvolutionPhase currentPhase = EvolutionPhase.PureSlime;
         
-        // Experience points for evolution
-        public float evolutionPoints = 0f;
-        
-        // Points required for each phase
-        public float[] phaseRequirements = new float[]
+        // Level thresholds for each phase
+        public int[] levelThresholds = new int[]
         {
-            0f,      // Slime (starting)
-            100f,    // Named Monster
-            300f,    // Demon Lord  
-            600f     // True Dragon
+            1,   // Pure Slime (level 1-9)
+            10,  // Human Form Acquired (level 10-19)
+            20,  // Demon Lord Awakening (level 20-29)
+            30   // True Dragon Ascension (level 30+)
         };
 
         // Stat multipliers per phase
@@ -42,19 +42,8 @@ namespace RimuruMod.Content.Controllers
         public float[] damageMultipliers = new float[] { 1.0f, 1.1f, 1.25f, 1.5f };
         public float[] speedMultipliers = new float[] { 1.0f, 1.05f, 1.1f, 1.15f };
 
-        // Time-based evolution
-        private float timeInRun = 0f;
-        public bool enableTimeBasedEvolution = true;
-        public float timePerEvolutionPoint = 30f; // Gain 1 point per 30 seconds
-
-        // Devour-based evolution
-        public float pointsPerDevour = 5f;
-        public float pointsPerEliteDevour = 15f;
-        public float pointsPerBossDevour = 30f;
-
-        // Evolution notification cooldown
-        private float notificationCooldown = 0f;
-        private const float NOTIFICATION_COOLDOWN_TIME = 5f;
+        // Track if form toggle is unlocked
+        public bool isHumanFormUnlocked = false;
 
         public void Awake()
         {
@@ -68,10 +57,9 @@ namespace RimuruMod.Content.Controllers
                 characterBody = characterMaster.GetBody();
             }
             
-            // Start at Slime phase
-            currentPhase = EvolutionPhase.Slime;
-            evolutionPoints = 0f;
-            timeInRun = 0f;
+            // Start at Pure Slime phase
+            currentPhase = EvolutionPhase.PureSlime;
+            isHumanFormUnlocked = false;
         }
 
         public void FixedUpdate()
@@ -81,92 +69,52 @@ namespace RimuruMod.Content.Controllers
                 characterBody = characterMaster.GetBody();
             }
 
-            if (characterBody)
+            if (characterBody && Config.enableEvolutionSystem.Value)
             {
-                // Time-based evolution progression
-                if (enableTimeBasedEvolution && Config.enableEvolutionSystem.Value)
-                {
-                    timeInRun += Time.fixedDeltaTime;
-                    
-                    // Add evolution points based on time
-                    if (timeInRun >= timePerEvolutionPoint)
-                    {
-                        timeInRun -= timePerEvolutionPoint;
-                        AddEvolutionPoints(1f, false);
-                    }
-                }
-
-                // Check for phase upgrades
-                CheckPhaseUpgrade();
-
-                // Update notification cooldown
-                if (notificationCooldown > 0f)
-                {
-                    notificationCooldown -= Time.fixedDeltaTime;
-                }
+                // Check current level and update phase
+                CheckLevelBasedPhase();
             }
         }
 
         /// <summary>
-        /// Adds evolution points and checks for phase upgrade
+        /// Checks player level and updates evolution phase
         /// </summary>
-        public void AddEvolutionPoints(float points, bool showNotification = true)
+        private void CheckLevelBasedPhase()
         {
-            if (!Config.enableEvolutionSystem.Value)
+            if (!characterBody)
             {
                 return;
             }
 
-            evolutionPoints += points;
+            uint currentLevel = characterBody.level;
+            EvolutionPhase newPhase = DeterminePhaseFromLevel((int)currentLevel);
 
-            if (showNotification && notificationCooldown <= 0f)
+            if (newPhase != currentPhase)
             {
-                ShowEvolutionProgress();
-                notificationCooldown = NOTIFICATION_COOLDOWN_TIME;
+                EvolveToPhase(newPhase);
             }
-
-            CheckPhaseUpgrade();
         }
 
         /// <summary>
-        /// Called when devouring an enemy
+        /// Determines evolution phase based on character level
         /// </summary>
-        public void OnEnemyDevoured(CharacterBody victimBody)
+        private EvolutionPhase DeterminePhaseFromLevel(int level)
         {
-            if (!Config.enableEvolutionSystem.Value)
+            if (level >= levelThresholds[3]) // Level 30+
             {
-                return;
+                return EvolutionPhase.TrueDragonAscension;
             }
-
-            float points = pointsPerDevour;
-
-            // Bonus points for elite enemies
-            if (victimBody.isElite)
+            else if (level >= levelThresholds[2]) // Level 20-29
             {
-                points = pointsPerEliteDevour;
+                return EvolutionPhase.DemonLordAwakening;
             }
-
-            // Bonus points for bosses
-            if (victimBody.isBoss)
+            else if (level >= levelThresholds[1]) // Level 10-19
             {
-                points = pointsPerBossDevour;
+                return EvolutionPhase.HumanFormAcquired;
             }
-
-            AddEvolutionPoints(points, true);
-        }
-
-        /// <summary>
-        /// Checks if enough points to upgrade to next phase
-        /// </summary>
-        private void CheckPhaseUpgrade()
-        {
-            EvolutionPhase nextPhase = currentPhase + 1;
-
-            // Check if can evolve to next phase
-            if ((int)nextPhase < phaseRequirements.Length && 
-                evolutionPoints >= phaseRequirements[(int)nextPhase])
+            else // Level 1-9
             {
-                EvolveToPhase(nextPhase);
+                return EvolutionPhase.PureSlime;
             }
         }
 
@@ -175,13 +123,19 @@ namespace RimuruMod.Content.Controllers
         /// </summary>
         private void EvolveToPhase(EvolutionPhase newPhase)
         {
-            if (newPhase <= currentPhase || (int)newPhase >= phaseRequirements.Length)
+            if (newPhase == currentPhase)
             {
                 return;
             }
 
             EvolutionPhase oldPhase = currentPhase;
             currentPhase = newPhase;
+
+            // Update form unlock status
+            if (currentPhase >= EvolutionPhase.HumanFormAcquired)
+            {
+                isHumanFormUnlocked = true;
+            }
 
             // Show evolution notification
             ShowEvolutionNotification(oldPhase, newPhase);
@@ -205,26 +159,13 @@ namespace RimuruMod.Content.Controllers
         private void ShowEvolutionNotification(EvolutionPhase oldPhase, EvolutionPhase newPhase)
         {
             string phaseName = GetPhaseName(newPhase);
+            string phaseDescription = GetPhaseDescription(newPhase);
+            
             Chat.AddMessage($"<style=cIsUtility>═══════════════════════════</style>");
             Chat.AddMessage($"<style=cDeath>EVOLUTION COMPLETE!</style>");
             Chat.AddMessage($"<style=cIsUtility>{GetPhaseName(oldPhase)} → {phaseName}</style>");
-            Chat.AddMessage($"<style=cIsUtility>New abilities unlocked!</style>");
+            Chat.AddMessage($"<style=cStack>{phaseDescription}</style>");
             Chat.AddMessage($"<style=cIsUtility>═══════════════════════════</style>");
-        }
-
-        /// <summary>
-        /// Shows current evolution progress
-        /// </summary>
-        private void ShowEvolutionProgress()
-        {
-            EvolutionPhase nextPhase = currentPhase + 1;
-            if ((int)nextPhase < phaseRequirements.Length)
-            {
-                float progress = (evolutionPoints - phaseRequirements[(int)currentPhase]) / 
-                                (phaseRequirements[(int)nextPhase] - phaseRequirements[(int)currentPhase]) * 100f;
-                
-                Chat.AddMessage($"<style=cIsUtility>Evolution Progress: {progress:F0}% to {GetPhaseName(nextPhase)}</style>");
-            }
         }
 
         /// <summary>
@@ -234,16 +175,36 @@ namespace RimuruMod.Content.Controllers
         {
             switch (phase)
             {
-                case EvolutionPhase.Slime:
-                    return "Slime";
-                case EvolutionPhase.NamedMonster:
-                    return "Named Monster";
-                case EvolutionPhase.DemonLord:
-                    return "Demon Lord";
-                case EvolutionPhase.TrueDragon:
-                    return "True Dragon";
+                case EvolutionPhase.PureSlime:
+                    return "Pure Slime";
+                case EvolutionPhase.HumanFormAcquired:
+                    return "Human Form Acquired";
+                case EvolutionPhase.DemonLordAwakening:
+                    return "Demon Lord Awakening";
+                case EvolutionPhase.TrueDragonAscension:
+                    return "True Dragon Ascension";
                 default:
                     return "Unknown";
+            }
+        }
+
+        /// <summary>
+        /// Gets description for a phase
+        /// </summary>
+        private string GetPhaseDescription(EvolutionPhase phase)
+        {
+            switch (phase)
+            {
+                case EvolutionPhase.PureSlime:
+                    return "Focus: Survival, learning to devour enemies";
+                case EvolutionPhase.HumanFormAcquired:
+                    return "New abilities unlocked! Can now toggle between Slime and Human forms";
+                case EvolutionPhase.DemonLordAwakening:
+                    return "Enhanced forms and devastating power!";
+                case EvolutionPhase.TrueDragonAscension:
+                    return "Ultimate power achieved! Endgame god-mode unlocked";
+                default:
+                    return "";
             }
         }
 
@@ -260,13 +221,13 @@ namespace RimuruMod.Content.Controllers
             // Apply phase-specific buffs
             switch (currentPhase)
             {
-                case EvolutionPhase.NamedMonster:
+                case EvolutionPhase.HumanFormAcquired:
                     characterBody.ApplyBuff(Buffs.evolutionPhase1Buff.buffIndex);
                     break;
-                case EvolutionPhase.DemonLord:
+                case EvolutionPhase.DemonLordAwakening:
                     characterBody.ApplyBuff(Buffs.evolutionPhase2Buff.buffIndex);
                     break;
-                case EvolutionPhase.TrueDragon:
+                case EvolutionPhase.TrueDragonAscension:
                     characterBody.ApplyBuff(Buffs.evolutionPhase3Buff.buffIndex);
                     break;
             }
@@ -313,12 +274,20 @@ namespace RimuruMod.Content.Controllers
         }
 
         /// <summary>
+        /// Checks if human form is unlocked (level 10+)
+        /// </summary>
+        public bool IsHumanFormUnlocked()
+        {
+            return isHumanFormUnlocked;
+        }
+
+        /// <summary>
         /// Checks if an ability is unlocked at current phase
         /// </summary>
         public bool IsAbilityUnlocked(string abilityName)
         {
-            // Basic abilities available at Slime phase
-            if (currentPhase >= EvolutionPhase.Slime)
+            // Basic abilities available at Pure Slime phase
+            if (currentPhase >= EvolutionPhase.PureSlime)
             {
                 return true;
             }

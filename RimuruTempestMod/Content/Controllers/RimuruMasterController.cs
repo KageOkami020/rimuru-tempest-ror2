@@ -157,12 +157,6 @@ namespace RimuruMod.Modules.Survivors
 							}
                         }
 
-						// Add evolution points for devouring
-						if (Config.enableEvolutionSystem.Value && evolutionController)
-						{
-							evolutionController.OnEnemyDevoured(damageReport.victimBody);
-						}
-
                         AkSoundEngine.PostEvent("RimuruAnalyse", characterBody.gameObject);
 
                         RoR2.EffectManager.SpawnEffect(Modules.AssetsRimuru.devourskillgetEffect, new RoR2.EffectData

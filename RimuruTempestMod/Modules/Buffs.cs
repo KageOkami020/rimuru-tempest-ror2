@@ -150,9 +150,9 @@ namespace RimuruMod.Modules
             immuneToFallDamage = AddNewBuff("Immune To Fall Damage", AssetsRimuru.shieldBuffIcon, Color.white, false, false);
 
             // Evolution phase buffs
-            evolutionPhase1Buff = AddNewBuff($"Named Monster - Enhanced stats and abilities", AssetsRimuru.boostBuffIcon, new Color(0.5f, 0.8f, 1.0f), false, false);
-            evolutionPhase2Buff = AddNewBuff($"Demon Lord - Greatly enhanced power", AssetsRimuru.bearVoidReadyBuffIcon, new Color(0.8f, 0.2f, 1.0f), false, false);
-            evolutionPhase3Buff = AddNewBuff($"True Dragon - Ultimate form", AssetsRimuru.resonanceBuffIcon, new Color(1.0f, 0.8f, 0.0f), false, false);
+            evolutionPhase1Buff = AddNewBuff($"Human Form Acquired - Enhanced stats and form toggle unlocked", AssetsRimuru.boostBuffIcon, new Color(0.5f, 0.8f, 1.0f), false, false);
+            evolutionPhase2Buff = AddNewBuff($"Demon Lord Awakening - Greatly enhanced power", AssetsRimuru.bearVoidReadyBuffIcon, new Color(0.8f, 0.2f, 1.0f), false, false);
+            evolutionPhase3Buff = AddNewBuff($"True Dragon Ascension - Ultimate form achieved", AssetsRimuru.resonanceBuffIcon, new Color(1.0f, 0.8f, 0.0f), false, false);
 
             // Combined ability buffs
             plasmaStormBuff = AddNewBuff($"Plasma Storm - Fire and Lightning fusion", AssetsRimuru.fireBuffIcon, new Color(1.0f, 0.5f, 1.0f), false, false);
