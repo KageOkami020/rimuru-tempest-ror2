@@ -62,7 +62,7 @@ namespace RimuruMod.Modules
 
             #region Special
             LanguageAPI.Add(prefix + "SPECIAL_TRANSFORMHUMAN_NAME", "Transform");
-            LanguageAPI.Add(prefix + "SPECIAL_TRANSFORMHUMAN_DESCRIPTION", $"Transform into your slime form.");
+            LanguageAPI.Add(prefix + "SPECIAL_TRANSFORMHUMAN_DESCRIPTION", $"Transform into your slime form. <style=cStack>(Unlocks at Level 10)</style>");
             #endregion
             #endregion
 
@@ -86,7 +86,7 @@ namespace RimuruMod.Modules
 
             #region Special
             LanguageAPI.Add(prefix + "SPECIAL_TRANSFORMSLIME_NAME", "Transform");
-            LanguageAPI.Add(prefix + "SPECIAL_TRANSFORMSLIME_DESCRIPTION", $"Transform into your human form.");
+            LanguageAPI.Add(prefix + "SPECIAL_TRANSFORMSLIME_DESCRIPTION", $"Transform into your human form. <style=cStack>(Unlocks at Level 10)</style>");
             #endregion
             #endregion
             #region Achievements
