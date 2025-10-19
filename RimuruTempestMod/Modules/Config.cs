@@ -43,6 +43,15 @@ namespace RimuruMod.Modules
         public static ConfigEntry<bool> turnOffDevourBuffTimers;
         public static ConfigEntry<float> devourBuffLength;
 
+        // Evolution System - 08
+        public static ConfigEntry<bool> enableEvolutionSystem;
+        public static ConfigEntry<float> evolutionTimePerPoint;
+        public static ConfigEntry<float> evolutionPointsPerDevour;
+
+        // Ability Combination - 09
+        public static ConfigEntry<bool> enableAbilityCombination;
+        public static ConfigEntry<int> maxStoredAbilities;
+
         //Add config for all damage coefficients.
         /*
         //Waterblade parameters 05
@@ -118,6 +127,58 @@ namespace RimuruMod.Modules
                 new ConfigDefinition("07 - Devour Buffs", "Devour Buff Length"),
                 60f,
                 new ConfigDescription("Lifetime of buff when first consumed. If another stack is attained while you already have that buff, it will refresh the buff by adding this amount of seconds to its lifetime.",
+                    null,
+                    Array.Empty<object>()
+                )
+            );
+
+            // Evolution System - 08
+            enableEvolutionSystem = RimuruPlugin.instance.Config.Bind<bool>
+            (
+                new ConfigDefinition("08 - Evolution System", "Enable Evolution System"),
+                true,
+                new ConfigDescription("Enables the evolution system where Rimuru evolves through phases (Slime -> Named Monster -> Demon Lord -> True Dragon)",
+                    null,
+                    Array.Empty<object>()
+                )
+            );
+
+            evolutionTimePerPoint = RimuruPlugin.instance.Config.Bind<float>
+            (
+                new ConfigDefinition("08 - Evolution System", "Time Per Evolution Point"),
+                30f,
+                new ConfigDescription("Seconds required to gain 1 evolution point passively",
+                    null,
+                    Array.Empty<object>()
+                )
+            );
+
+            evolutionPointsPerDevour = RimuruPlugin.instance.Config.Bind<float>
+            (
+                new ConfigDefinition("08 - Evolution System", "Points Per Devour"),
+                5f,
+                new ConfigDescription("Evolution points gained when devouring a standard enemy",
+                    null,
+                    Array.Empty<object>()
+                )
+            );
+
+            // Ability Combination - 09
+            enableAbilityCombination = RimuruPlugin.instance.Config.Bind<bool>
+            (
+                new ConfigDefinition("09 - Ability Combination", "Enable Ability Combination"),
+                true,
+                new ConfigDescription("Enables the ability combination system where devoured abilities can be fused into powerful hybrid abilities",
+                    null,
+                    Array.Empty<object>()
+                )
+            );
+
+            maxStoredAbilities = RimuruPlugin.instance.Config.Bind<int>
+            (
+                new ConfigDefinition("09 - Ability Combination", "Max Stored Abilities"),
+                10,
+                new ConfigDescription("Maximum number of abilities that can be stored for combination",
                     null,
                     Array.Empty<object>()
                 )
