@@ -43,6 +43,13 @@ namespace RimuruMod.Modules
         public static ConfigEntry<bool> turnOffDevourBuffTimers;
         public static ConfigEntry<float> devourBuffLength;
 
+        // Evolution System - 08
+        public static ConfigEntry<bool> enableEvolutionSystem;
+
+        // Ability Combination - 09
+        public static ConfigEntry<bool> enableAbilityCombination;
+        public static ConfigEntry<int> maxStoredAbilities;
+
         //Add config for all damage coefficients.
         /*
         //Waterblade parameters 05
@@ -118,6 +125,38 @@ namespace RimuruMod.Modules
                 new ConfigDefinition("07 - Devour Buffs", "Devour Buff Length"),
                 60f,
                 new ConfigDescription("Lifetime of buff when first consumed. If another stack is attained while you already have that buff, it will refresh the buff by adding this amount of seconds to its lifetime.",
+                    null,
+                    Array.Empty<object>()
+                )
+            );
+
+            // Evolution System - 08
+            enableEvolutionSystem = RimuruPlugin.instance.Config.Bind<bool>
+            (
+                new ConfigDefinition("08 - Evolution System", "Enable Evolution System"),
+                true,
+                new ConfigDescription("Enables the level-based evolution system (Level 1-9: Pure Slime, 10-19: Human Form, 20-29: Demon Lord, 30+: True Dragon)",
+                    null,
+                    Array.Empty<object>()
+                )
+            );
+
+            // Ability Combination - 09
+            enableAbilityCombination = RimuruPlugin.instance.Config.Bind<bool>
+            (
+                new ConfigDefinition("09 - Ability Combination", "Enable Ability Combination"),
+                true,
+                new ConfigDescription("Enables the ability combination system where devoured abilities can be fused into powerful hybrid abilities",
+                    null,
+                    Array.Empty<object>()
+                )
+            );
+
+            maxStoredAbilities = RimuruPlugin.instance.Config.Bind<int>
+            (
+                new ConfigDefinition("09 - Ability Combination", "Max Stored Abilities"),
+                10,
+                new ConfigDescription("Maximum number of abilities that can be stored for combination",
                     null,
                     Array.Empty<object>()
                 )
@@ -323,6 +362,23 @@ namespace RimuruMod.Modules
                         min = 10f,
                         max = 900f,
                         increment = 1f
+                    }
+                ));
+
+            // Evolution System - 08
+            ModSettingsManager.AddOption(new CheckBoxOption(enableEvolutionSystem));
+
+            // Ability Combination - 09
+            ModSettingsManager.AddOption(new CheckBoxOption(enableAbilityCombination));
+
+            ModSettingsManager.AddOption(
+                new StepSliderOption(
+                    maxStoredAbilities,
+                    new StepSliderConfig
+                    {
+                        min = 2, // Minimum 2 abilities required for combination
+                        max = 50,
+                        increment = 1
                     }
                 ));
         }

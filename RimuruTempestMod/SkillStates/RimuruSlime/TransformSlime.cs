@@ -17,6 +17,20 @@ namespace RimuruMod.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
+            
+            // Check if human form is unlocked (level 10+)
+            if (characterBody && characterBody.master)
+            {
+                var evolutionController = characterBody.master.GetComponent<Modules.Survivors.EvolutionController>();
+                if (evolutionController && !evolutionController.IsHumanFormUnlocked())
+                {
+                    // Human form not unlocked yet, cancel transformation
+                    Chat.AddMessage("<style=cIsHealth>Human form unlocks at level 10!</style>");
+                    this.outer.SetNextStateToMain();
+                    return;
+                }
+            }
+            
             masterController = characterBody.master.GetComponent<RimuruMasterController>();
             oldHealth = characterBody.healthComponent.health;
             //new TransformBody(characterBody.master.netId, oldHealth, (int)TransformBody.TargetBody.HUMAN).Send(R2API.Networking.NetworkDestination.Clients);

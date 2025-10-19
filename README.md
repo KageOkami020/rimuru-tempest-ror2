@@ -2,6 +2,23 @@
 
 Rimuru is a form-changing character that alternates between utility and damage.
 
+## NEW FEATURES (v2.0.0)
+
+### Evolution System
+- Rimuru now evolves through 4 phases: Slime → Named Monster → Demon Lord → True Dragon
+- Each phase provides significant stat increases (health, damage, speed)
+- Evolution points gained over time and by devouring enemies
+- Configurable progression speed
+
+### Ability Combination System  
+- Store up to 10 devoured abilities for later use
+- Combine compatible abilities into 10 powerful hybrid abilities
+- Examples: Plasma Storm (Fire + Lightning), Titan's Might (Golem + Beetle Queen)
+- Strategic choice between keeping individual abilities or fusing them
+- See [EVOLUTION_AND_COMBINATION_GUIDE.md](EVOLUTION_AND_COMBINATION_GUIDE.md) for full details
+
+## Core Features
+
 - His sword attack can dash towards enemies
 - He has elemental interactions when an enemy is wet, shocked, or ignited
 - Aim to switch between his forms to maximise his damage output
@@ -18,6 +35,15 @@ Mod was completed with what we envisioned now, thanks to the commissioner, Leape
 
 ## Latest Changes
 
+- v2.0.0
+    - **MAJOR UPDATE: Evolution & Ability Combination Systems**
+    - Added evolution system with 4 phases (Slime → Named Monster → Demon Lord → True Dragon)
+    - Evolution provides scaling stat bonuses as you progress
+    - Added ability combination system - fuse devoured abilities into powerful hybrids
+    - 10 unique combined abilities (e.g., Plasma Storm, Titan's Might, Tactical Genius)
+    - Ability storage system - store up to 10 devoured abilities
+    - Configurable evolution speed and ability limits
+    - See EVOLUTION_AND_COMBINATION_GUIDE.md for complete documentation
 - v1.1.2
     - Recompiled mod to use new method signatures
     - Removed error spam on death due to missing body.
@@ -213,7 +239,11 @@ There's no need to pay for mods, but a coffee would be nice once in awhile!
 
 ## Future Plans
 
-- We don't plan on updating this after this, other than bug fixes.
+- Visual effects for evolution phases
+- UI indicators for evolution progress
+- More combined ability recipes
+- Manual ability combination skill/interface
+- Phase-specific exclusive abilities
 
 ## Credits
 

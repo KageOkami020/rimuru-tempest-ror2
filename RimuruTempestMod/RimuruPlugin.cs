@@ -13,8 +13,8 @@ using BepInEx.Bootstrap;
 using RimuruMod.SkillStates;
 using RimuruMod.Modules;
 using RimuruMod.Modules.Networking;
-using RimuruMod.Modules.Networking;
 using RimuruMod.Content.BuffControllers;
+using RimuruMod.Content.Controllers;
 using R2API;
 
 [module: UnverifiableCode]
@@ -362,6 +362,23 @@ namespace RimuruMod
                         {
                             wetcontroller = self.gameObject.AddComponent<WetEffectController>();
                             wetcontroller.charbody = self;
+                        }
+                    }
+
+                    // Apply evolution phase stat bonuses
+                    if (Config.enableEvolutionSystem.Value && 
+                        (self.baseNameToken == DEVELOPER_PREFIX + "_RIMURUSLIME_BODY_NAME" || 
+                         self.baseNameToken == DEVELOPER_PREFIX + "_RIMURUHUMAN_BODY_NAME"))
+                    {
+                        if (self.master)
+                        {
+                            var evolutionController = self.master.GetComponent<Modules.Survivors.EvolutionController>();
+                            if (evolutionController)
+                            {
+                                self.maxHealth *= evolutionController.GetHealthMultiplier();
+                                self.damage *= evolutionController.GetDamageMultiplier();
+                                self.moveSpeed *= evolutionController.GetSpeedMultiplier();
+                            }
                         }
                     }
                 }

@@ -9,6 +9,7 @@ using UnityEngine.Networking;
 using R2API.Networking;
 using RimuruMod.SkillStates;
 using RimuruMod.Content.BuffControllers;
+using RimuruMod.Content.Controllers;
 using UnityEngine.PlayerLoop;
 using RimuruMod.Modules.Networking;
 using R2API.Networking.Interfaces;
@@ -27,6 +28,11 @@ namespace RimuruMod.Modules.Survivors
 		private CharacterMaster characterMaster;
 		private CharacterBody characterBody;
 		private HealthComponent healthComponent;
+
+		// New controllers for revamp
+		public AbilityStorageController abilityStorage;
+		public AbilityCombinationManager combinationManager;
+		public EvolutionController evolutionController;
 
 		public bool isBodyInitialized;
 		public bool devourShoot;
@@ -55,6 +61,37 @@ namespace RimuruMod.Modules.Survivors
 
 			this.devourShoot = false;
 			this.setHealthToValue = false;
+
+			// Initialize new systems
+			if (Config.enableAbilityCombination.Value)
+			{
+				abilityStorage = characterMaster.GetComponent<AbilityStorageController>();
+				if (!abilityStorage)
+				{
+					abilityStorage = characterMaster.gameObject.AddComponent<AbilityStorageController>();
+				}
+
+				combinationManager = characterMaster.GetComponent<AbilityCombinationManager>();
+				if (!combinationManager)
+				{
+					combinationManager = characterMaster.gameObject.AddComponent<AbilityCombinationManager>();
+				}
+
+				// Set max stored abilities from config
+				if (abilityStorage)
+				{
+					abilityStorage.maxStoredAbilities = Config.maxStoredAbilities.Value;
+				}
+			}
+
+			if (Config.enableEvolutionSystem.Value)
+			{
+				evolutionController = characterMaster.GetComponent<EvolutionController>();
+				if (!evolutionController)
+				{
+					evolutionController = characterMaster.gameObject.AddComponent<EvolutionController>();
+				}
+			}
 
 		}
 
@@ -112,7 +149,14 @@ namespace RimuruMod.Modules.Survivors
                         if (Modules.StaticValues.rimDic.ContainsKey(newbodyPrefab.name) && isBodyInitialized) 
 						{
                             incomingSkill = Modules.StaticValues.rimDic[newbodyPrefab.name].Invoke(characterMaster);
+
+							// Add to ability storage for combination system
+							if (Config.enableAbilityCombination.Value && abilityStorage)
+							{
+								abilityStorage.AddAbility(newbodyPrefab.name);
+							}
                         }
+
                         AkSoundEngine.PostEvent("RimuruAnalyse", characterBody.gameObject);
 
                         RoR2.EffectManager.SpawnEffect(Modules.AssetsRimuru.devourskillgetEffect, new RoR2.EffectData

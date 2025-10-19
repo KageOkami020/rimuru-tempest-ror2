@@ -69,6 +69,24 @@ namespace RimuruMod.Modules
 
         internal static BuffDef immuneToFallDamage;
 
+        // Evolution phase buffs
+        internal static BuffDef evolutionPhase1Buff;
+        internal static BuffDef evolutionPhase2Buff;
+        internal static BuffDef evolutionPhase3Buff;
+
+        // Combined ability buffs
+        internal static BuffDef plasmaStormBuff;
+        internal static BuffDef absoluteZeroBuff;
+        internal static BuffDef titanMightBuff;
+        internal static BuffDef chaosMagicBuff;
+        internal static BuffDef dragonScalesBuff;
+        internal static BuffDef tacticalGeniusBuff;
+        internal static BuffDef tacticalGeniusBuffStacks;
+        internal static BuffDef natureBlessingBuff;
+        internal static BuffDef swarmIntelligenceBuff;
+        internal static BuffDef unstoppableForceBuff;
+        internal static BuffDef volcanicFuryBuff;
+
         internal static void RegisterBuffs()
         {
             SpatialMovementBuff = AddNewBuff($"Spatial Movement Buff", AssetsRimuru.shieldBuffIcon, Color.cyan, false, false);
@@ -130,6 +148,24 @@ namespace RimuruMod.Modules
 
             rimuruDevourDebuff = AddNewBuff($"Devour Debuff", AssetsRimuru.tarBuffIcon, Color.cyan, false, true);
             immuneToFallDamage = AddNewBuff("Immune To Fall Damage", AssetsRimuru.shieldBuffIcon, Color.white, false, false);
+
+            // Evolution phase buffs
+            evolutionPhase1Buff = AddNewBuff($"Human Form Acquired - Enhanced stats and form toggle unlocked", AssetsRimuru.boostBuffIcon, new Color(0.5f, 0.8f, 1.0f), false, false);
+            evolutionPhase2Buff = AddNewBuff($"Demon Lord Awakening - Greatly enhanced power", AssetsRimuru.bearVoidReadyBuffIcon, new Color(0.8f, 0.2f, 1.0f), false, false);
+            evolutionPhase3Buff = AddNewBuff($"True Dragon Ascension - Ultimate form achieved", AssetsRimuru.resonanceBuffIcon, new Color(1.0f, 0.8f, 0.0f), false, false);
+
+            // Combined ability buffs
+            plasmaStormBuff = AddNewBuff($"Plasma Storm - Fire and Lightning fusion", AssetsRimuru.fireBuffIcon, new Color(1.0f, 0.5f, 1.0f), false, false);
+            absoluteZeroBuff = AddNewBuff($"Absolute Zero - Freeze enemies solid", AssetsRimuru.lightningBuffIcon, new Color(0.5f, 0.9f, 1.0f), false, false);
+            titanMightBuff = AddNewBuff($"Titan's Might - Massive defense boost", AssetsRimuru.shieldBuffIcon, new Color(0.6f, 0.6f, 0.6f), false, false);
+            chaosMagicBuff = AddNewBuff($"Chaos Magic - Unpredictable power", AssetsRimuru.boostBuffIcon, new Color(0.8f, 0.0f, 0.8f), false, false);
+            dragonScalesBuff = AddNewBuff($"Dragon's Scales - Fiery armor", AssetsRimuru.strongerBurnIcon, new Color(1.0f, 0.4f, 0.0f), false, false);
+            tacticalGeniusBuff = AddNewBuff($"Tactical Genius - Superior tactics", AssetsRimuru.noCooldownBuffIcon, new Color(0.0f, 0.8f, 1.0f), false, false);
+            tacticalGeniusBuffStacks = AddNewBuff($"Tactical Genius Stacks", AssetsRimuru.noCooldownBuffIcon, Color.grey, true, false);
+            natureBlessingBuff = AddNewBuff($"Nature's Blessing - Healing aura", AssetsRimuru.healBuffIcon, new Color(0.2f, 1.0f, 0.2f), false, false);
+            swarmIntelligenceBuff = AddNewBuff($"Swarm Intelligence - Orbital attacks", AssetsRimuru.shurikenBuffIcon, new Color(0.7f, 0.7f, 0.0f), false, false);
+            unstoppableForceBuff = AddNewBuff($"Unstoppable Force - Devastating charges", AssetsRimuru.sprintBuffIcon, new Color(1.0f, 0.5f, 0.0f), false, false);
+            volcanicFuryBuff = AddNewBuff($"Volcanic Fury - Volcanic devastation", AssetsRimuru.claygooBuffIcon, new Color(1.0f, 0.2f, 0.0f), false, false);
 
         }
 
