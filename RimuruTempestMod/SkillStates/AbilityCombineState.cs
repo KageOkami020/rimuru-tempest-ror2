@@ -20,8 +20,13 @@ namespace RimuruMod.SkillStates
         private List<AbilityStorageController.AbilityCombination> availableCombinations;
         private int selectedIndex = 0;
         private float baseDuration = 5f;
-        private float exitDuration = 0.5f;
         private bool hasCombined = false;
+
+        // Animation constants
+        private const string ANIMATION_LAYER = "Gesture, Override";
+        private const string ANIMATION_NAME = "Analyze";
+        private const string ANIMATION_PLAYBACK_RATE = "Analyze.playbackRate";
+        private const string SOUND_EVENT_ANALYZE = "RimuruAnalyse";
 
         public override void OnEnter()
         {
@@ -57,7 +62,7 @@ namespace RimuruMod.SkillStates
             ShowAvailableCombinations();
 
             // Play animation
-            PlayAnimation("Gesture, Override", "Analyze", "Analyze.playbackRate", baseDuration);
+            PlayAnimation(ANIMATION_LAYER, ANIMATION_NAME, ANIMATION_PLAYBACK_RATE, baseDuration);
         }
 
         public override void FixedUpdate()
@@ -126,12 +131,12 @@ namespace RimuruMod.SkillStates
             if (info != null)
             {
                 Chat.AddMessage($"<style=cIsUtility>[{selectedIndex + 1}/{availableCombinations.Count}] {info.name}</style>");
-                Chat.AddMessage($"<style=cStack>{GetEnemyDisplayName(combination.ability1)} + {GetEnemyDisplayName(combination.ability2)}</style>");
+                Chat.AddMessage($"<style=cStack>{AbilityStorageController.GetEnemyDisplayName(combination.ability1)} + {AbilityStorageController.GetEnemyDisplayName(combination.ability2)}</style>");
                 Chat.AddMessage($"<style=cDeath>{info.description}</style>");
             }
             else
             {
-                Chat.AddMessage($"<style=cStack>[{selectedIndex + 1}/{availableCombinations.Count}] {GetEnemyDisplayName(combination.ability1)} + {GetEnemyDisplayName(combination.ability2)}</style>");
+                Chat.AddMessage($"<style=cStack>[{selectedIndex + 1}/{availableCombinations.Count}] {AbilityStorageController.GetEnemyDisplayName(combination.ability1)} + {AbilityStorageController.GetEnemyDisplayName(combination.ability2)}</style>");
             }
         }
 
@@ -151,7 +156,7 @@ namespace RimuruMod.SkillStates
                 // Play success effect
                 if (characterBody)
                 {
-                    AkSoundEngine.PostEvent("RimuruAnalyse", characterBody.gameObject);
+                    AkSoundEngine.PostEvent(SOUND_EVENT_ANALYZE, characterBody.gameObject);
                     EffectManager.SpawnEffect(AssetsRimuru.devourskillgetEffect, new EffectData
                     {
                         origin = characterBody.corePosition,
@@ -167,13 +172,6 @@ namespace RimuruMod.SkillStates
             {
                 Chat.AddMessage("<style=cIsHealth>Failed to combine abilities.</style>");
             }
-        }
-
-        private string GetEnemyDisplayName(string enemyName)
-        {
-            // Strip "Body" suffix and add spaces before capitals
-            string cleaned = enemyName.Replace("Body", "");
-            return System.Text.RegularExpressions.Regex.Replace(cleaned, "([a-z])([A-Z])", "$1 $2");
         }
 
         public override void OnExit()

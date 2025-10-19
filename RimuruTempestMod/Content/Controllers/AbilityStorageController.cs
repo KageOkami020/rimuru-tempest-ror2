@@ -120,7 +120,7 @@ namespace RimuruMod.Content.Controllers
         /// <summary>
         /// Gets a user-friendly display name for an enemy
         /// </summary>
-        private string GetEnemyDisplayName(string enemyName)
+        public static string GetEnemyDisplayName(string enemyName)
         {
             // Strip "Body" suffix and add spaces before capitals
             string cleaned = enemyName.Replace("Body", "");

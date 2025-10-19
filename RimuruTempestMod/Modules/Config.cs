@@ -420,7 +420,7 @@ namespace RimuruMod.Modules
                     maxStoredAbilities,
                     new StepSliderConfig
                     {
-                        min = 5,
+                        min = 2, // Minimum 2 abilities required for combination
                         max = 50,
                         increment = 1
                     }
