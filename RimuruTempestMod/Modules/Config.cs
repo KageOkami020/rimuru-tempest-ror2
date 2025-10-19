@@ -386,6 +386,45 @@ namespace RimuruMod.Modules
                         increment = 1f
                     }
                 ));
+
+            // Evolution System - 08
+            ModSettingsManager.AddOption(new CheckBoxOption(enableEvolutionSystem));
+
+            ModSettingsManager.AddOption(
+                new StepSliderOption(
+                    evolutionTimePerPoint,
+                    new StepSliderConfig
+                    {
+                        min = 5f,
+                        max = 120f,
+                        increment = 5f
+                    }
+                ));
+
+            ModSettingsManager.AddOption(
+                new StepSliderOption(
+                    evolutionPointsPerDevour,
+                    new StepSliderConfig
+                    {
+                        min = 1f,
+                        max = 50f,
+                        increment = 1f
+                    }
+                ));
+
+            // Ability Combination - 09
+            ModSettingsManager.AddOption(new CheckBoxOption(enableAbilityCombination));
+
+            ModSettingsManager.AddOption(
+                new StepSliderOption(
+                    maxStoredAbilities,
+                    new StepSliderConfig
+                    {
+                        min = 5,
+                        max = 50,
+                        increment = 1
+                    }
+                ));
         }
 
         // this helper automatically makes config entries for disabling survivors

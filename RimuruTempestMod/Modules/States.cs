@@ -26,6 +26,11 @@ namespace RimuruMod.Modules
             Modules.Content.AddEntityState(typeof(TransformSlime));
 
             Modules.Content.AddEntityState(typeof(Waterblade));
+
+            Modules.Content.AddEntityState(typeof(Analyze));
+
+            // New state for ability combination
+            Modules.Content.AddEntityState(typeof(AbilityCombineState));
         }
     }
 }
